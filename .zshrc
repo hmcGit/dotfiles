@@ -37,6 +37,8 @@ autoload -Uz compinit && compinit -u
 autoload -Uz url-quote-magic
 #vcs_info設定
 autoload -Uz vcs_info
+# cdr setting
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 
 #PROMPT="%{${fg[blue]}%}[%~]%{${reset_color}%}"
 
@@ -74,6 +76,7 @@ zle -N self-insert url-quote-magic
 #zle -N zle-line-finish
 #zle -N zle-keymap-select
 zle -N edit-command-line
+
 
 #
 # General settings
@@ -123,8 +126,27 @@ export LANG=ja_JP.UTF-8
 bindkey -v
 bindkey -v '^?' backward-delete-char
 bindkey '^[[Z' reverse-menu-complete
-bindkey '^@' anyframe-widget-cd-ghq-repository
-bindkey '^r' anyframe-widget-put-history
+
+bindkey '^xb' anyframe-widget-cdr
+bindkey '^x^b' anyframe-widget-checkout-git-branch
+
+bindkey '^xr' anyframe-widget-execute-history
+bindkey '^x^r' anyframe-widget-execute-history
+
+bindkey '^xp' anyframe-widget-put-history
+bindkey '^x^p' anyframe-widget-put-history
+
+bindkey '^xg' anyframe-widget-cd-ghq-repository
+bindkey '^x^g' anyframe-widget-cd-ghq-repository
+
+bindkey '^xk' anyframe-widget-kill
+bindkey '^x^k' anyframe-widget-kill
+
+bindkey '^xi' anyframe-widget-insert-git-branch
+bindkey '^x^i' anyframe-widget-insert-git-branch
+
+bindkey '^xf' anyframe-widget-insert-filename
+bindkey '^x^f' anyframe-widget-insert-filename
 
 #viins をemacsのごとく利用
 
@@ -175,6 +197,10 @@ sudo_path=({/usr/local,/usr,}/sbin(N-/))
 
 path=(~/bin(N-/) /usr/local/bin(N-/) ~/Library/Python/2.7/bin/ ${path})
 
+fpath=($HOME/.zsh/anygrame(N-/) $fpath)
+autoload -Uz anyframe-init
+anyframe-init
+
 #peco
 function peco-history-selection() {
     BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
@@ -184,6 +210,7 @@ function peco-history-selection() {
 
 zle -N peco-history-selection
 bindkey '^R' peco-history-selection
+bindkey '^X' peco-cdr
 
 # for powerline
 powerline-daemon -q
