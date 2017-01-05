@@ -38,7 +38,7 @@ autoload -Uz url-quote-magic
 #vcs_info設定
 autoload -Uz vcs_info
 
-PROMPT="%{${fg[blue]}%}[%~]%{${reset_color}%}"
+#PROMPT="%{${fg[blue]}%}[%~]%{${reset_color}%}"
 
 #
 # ZLE settings
@@ -46,33 +46,33 @@ PROMPT="%{${fg[blue]}%}[%~]%{${reset_color}%}"
 
 zle -N self-insert url-quote-magic
 #プロンプトに現在のモードを表示
-terminfo_down_sc=$terminfo[cud1]$terminfo[cuu1]$terminfo[sc]$terminfo[cud1]
-left_down_prompt_preexec() {
-    print -rn -- $terminfo[el]
-}
-add-zsh-hook preexec left_down_prompt_preexec
+#terminfo_down_sc=$terminfo[cud1]$terminfo[cuu1]$terminfo[sc]$terminfo[cud1]
+#left_down_prompt_preexec() {
+#    print -rn -- $terminfo[el]
+#}
+#add-zsh-hook preexec left_down_prompt_preexec
 
-function zle-keymap-select zle-line-init zle-line-finish
-{
-    case $KEYMAP in
-        main|viins)
-            PROMPT_2="$fg[cyan]-- INSERT --$reset_color"
-            ;;
-        vicmd)
-            PROMPT_2="$fg[white]-- NORMAL --$reset_color"
-            ;;
-        vivis|vivli)
-            PROMPT_2="$fg[yellow]-- VISUAL --$reset_color"
-            ;;
-    esac
+#function zle-keymap-select zle-line-init zle-line-finish
+#{
+#    case $KEYMAP in
+#        main|viins)
+#            PROMPT_2="$fg[cyan]-- INSERT --$reset_color"
+#            ;;
+#        vicmd)
+#            PROMPT_2="$fg[white]-- NORMAL --$reset_color"
+#            ;;
+#        vivis|vivli)
+#            PROMPT_2="$fg[yellow]-- VISUAL --$reset_color"
+#            ;;
+#    esac
 
-    PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}[%(?.%{${fg[green]}%}.%{${fg[red]}%})%n%{${reset_color}%}]%# "
-    zle reset-prompt
-}
+#    PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}[%(?.%{${fg[green]}%}.%{${fg[red]}%})%n%{${reset_color}%}]%# "
+#    zle reset-prompt
+#}
 
-zle -N zle-line-init
-zle -N zle-line-finish
-zle -N zle-keymap-select
+#zle -N zle-line-init
+#zle -N zle-line-finish
+#zle -N zle-keymap-select
 zle -N edit-command-line
 
 #
@@ -173,7 +173,7 @@ typeset -xT SUDO_PATH sudo_path
 typeset -U sudo_path
 sudo_path=({/usr/local,/usr,}/sbin(N-/))
 
-path=(~/bin(N-/) /usr/local/bin(N-/) ${path})
+path=(~/bin(N-/) /usr/local/bin(N-/) ~/Library/Python/2.7/bin/ ${path})
 
 #peco
 function peco-history-selection() {
@@ -185,34 +185,38 @@ function peco-history-selection() {
 zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
+# for powerline
+powerline-daemon -q
 
-function rprompt-git-current-branch {
-local name st color
+. ~/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
 
-if [[ "$PWD" =~ '/\.git(/.*)?$' ]]; then
-    return
-fi
-name=$(basename "`git symbolic-ref HEAD 2> /dev/null`")
-if [[ -z $name ]]; then
-    return
-fi
-st=`git status 2> /dev/null`
-if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
-    color=${fg[green]}
-elif [[ -n `echo "$st" | grep "^nothing added"` ]]; then
-    color=${fg[yellow]}
-elif [[ -n `echo "$st" | grep "^# Untracked"` ]]; then
-    color=${fg_bold[red]}
-else
-    color=${fg[red]}
-fi
+
+#function rprompt-git-current-branch {
+#local name st color
+
+#if [[ "$PWD" =~ '/\.git(/.*)?$' ]]; then
+#    return
+#fi
+#name=$(basename "`git symbolic-ref HEAD 2> /dev/null`")
+#if [[ -z $name ]]; then
+#    return
+#fi
+#st=`git status 2> /dev/null`
+#if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
+#    color=${fg[green]}
+#elif [[ -n `echo "$st" | grep "^nothing added"` ]]; then
+#    color=${fg[yellow]}
+#elif [[ -n `echo "$st" | grep "^# Untracked"` ]]; then
+#    color=${fg_bold[red]}
+#else
+#    color=${fg[red]}
+#fi
 # %{...%} は囲まれた文字列がエスケープシーケンスであることを明示する
 # これをしないと右プロンプトの位置がずれる
-echo "[%{$color%}$name%{$reset_color%}]"
-}
+#echo "[%{$color%}$name%{$reset_color%}]"
+#}
 
 # プロンプトが表示されるたびにプロンプト文字列を評価、置換する
-setopt prompt_subst
+#setopt prompt_subst
 
-RPROMPT='%40<...<%~`rprompt-git-current-branch`($?)'
-#PROMPT="%m %n%# "
+#RPROMPT='%40<...<%~`rprompt-git-current-branch`($?)'

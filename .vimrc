@@ -14,8 +14,8 @@ execute 'set runtimepath^=' . s:dein_repo_path
 
 " let g:dein#install_progress_type = 'title'
 let g:dein#enable_notification = 1
-
 call dein#begin(s:dein_path)
+call dein#add('sjl/badwolf')
 call dein#load_toml('~/.vim/dein/dein.toml', {'lazy': 0})
 call dein#load_toml('~/.vim/dein/dein-lazy.toml', {'lazy': 1})
 call dein#end()
@@ -23,8 +23,16 @@ call dein#end()
 if dein#check_install()
     call dein#install()
 endif
-" プラグイン以外のその他設定が続く
-" :
+" プラグイン以外のその他設定
+" powerline
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
+
+set laststatus=2
+set showtabline=2
+set noshowmode
+
 " 改行時に自動でインデントを行なう
 set autoindent
 "カラー有効
@@ -148,3 +156,5 @@ set wrap
 
 " 検索時に最後まで移動したら最初に戻る
 set wrapscan
+
+
